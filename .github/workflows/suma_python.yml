@@ -39,7 +39,7 @@ jobs:
       - name: Subir artefacto (HTML)
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './public' # <-- Aquí toma el index.html de tu carpeta public
+          path: './public' # Toma el HTML de la carpeta public
           
       - name: Desplegar en GitHub Pages
         id: deployment

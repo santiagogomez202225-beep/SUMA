@@ -5,7 +5,8 @@ from resta.views import restar
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # Ruta para hacer la resta
     path('restar/<str:a>/<str:b>/', restar, name='restar'),
-    # Le decimos que busque el index.html dentro de public
+    # Ruta principal: carga el HTML que está dentro de la carpeta public
     path('', TemplateView.as_view(template_name='public/index.html'), name='home'),
 ]
