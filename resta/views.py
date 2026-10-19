@@ -2,15 +2,16 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 def restar(request, a=None, b=None):
-    # Si los números vienen del formulario (URL: /restar/?a=10&b=3)
+    # Atrapamos los números si vienen del formulario HTML
     if request.method == 'GET' and 'a' in request.GET and 'b' in request.GET:
         a = request.GET.get('a')
         b = request.GET.get('b')
 
-    # Si ya tenemos los dos números, hacemos la operación
+    # Si tenemos ambos números, hacemos la resta
     if a is not None and b is not None:
         try:
             resultado = float(a) - float(b)
+            # Devolvemos una página HTML con el resultado
             return HttpResponse(f"""
                 <div style="font-family: Arial; text-align: center; margin-top: 50px;">
                     <h1 style="color: #2c3e50;">Resultado (Django) 🚀</h1>
@@ -22,5 +23,5 @@ def restar(request, a=None, b=None):
         except ValueError:
             return HttpResponse("Error: Asegúrate de ingresar números válidos.")
 
-    # Si entran a /restar/ sin números, los devolvemos al inicio
+    # Si alguien entra a /restar/ sin números, lo devolvemos a la calculadora
     return render(request, 'public/index.html')

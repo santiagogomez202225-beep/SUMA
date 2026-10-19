@@ -39,7 +39,7 @@ jobs:
       - name: Subir artefacto (HTML)
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.' # <-- IMPORTANTE: El punto (.) significa que sube el index.html de la raíz, NO el de la carpeta public
+          path: './public' # <-- IMPORTANTE: Le decimos que suba la carpeta public
           
       - name: Desplegar en GitHub Pages
         id: deployment
