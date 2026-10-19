@@ -2,7 +2,7 @@ name: Deploy Web App to GitHub Pages 🚀
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "master" ]
 
 jobs:
   test:
@@ -39,7 +39,7 @@ jobs:
       - name: Subir artefacto (HTML)
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './public' # Toma el HTML de la carpeta public
+          path: '.' # <-- IMPORTANTE: El punto (.) significa que sube el index.html de la raíz, NO el de la carpeta public
           
       - name: Desplegar en GitHub Pages
         id: deployment

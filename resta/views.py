@@ -1,17 +1,24 @@
 from django.http import HttpResponse
+from django.shortcuts import render
 
-def restar(request, a, b):
-    try:
-        resultado = float(a) - float(b)
-        # Un pequeño diseño para que se vea bien en el navegador
-        html = f"""
-        <div style="font-family: Arial; text-align: center; margin-top: 50px;">
-            <h2>Resultado de la Resta (Django) 🚀</h2>
-            <h1 style="color: #2c3e50;">La resta de {a} - {b} = {resultado}</h1>
-            <br>
-            <a href="/" style="padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 5px;">Volver al inicio</a>
-        </div>
-        """
-        return HttpResponse(html)
-    except ValueError:
-        return HttpResponse("Error: Asegúrate de ingresar números válidos en la URL.")
+def restar(request):
+    # Intentamos obtener los números 'a' y 'b' de la URL (formulario)
+    a = request.GET.get('a')
+    b = request.GET.get('b')
+
+    if a is not None and b is not None:
+        try:
+            resultado = float(a) - float(b)
+            return HttpResponse(f"""
+                <div style="font-family: Arial; text-align: center; margin-top: 50px;">
+                    <h1 style="color: #2c3e50;">Resultado (Django) 🚀</h1>
+                    <h2 style="color: #27ae60;">La resta de {a} - {b} = {resultado}</h2>
+                    <br><br>
+                    <a href="/" style="padding: 12px 25px; background: #3498db; color: white; text-decoration: none; border-radius: 8px; font-weight: bold;">Volver a calcular</a>
+                </div>
+            """)
+        except ValueError:
+            return HttpResponse("Error: Asegúrate de ingresar números válidos.")
+
+    # Si no hay números (por ejemplo, entran a /restar/10/3/), mostramos la calculadora de nuevo.
+    return render(request, 'index.html')
