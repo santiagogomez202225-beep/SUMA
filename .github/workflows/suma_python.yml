@@ -1,14 +1,11 @@
-name: CI Suma y Resta
+name: Deploy Web App to GitHub Pages 🚀
 
 on:
   push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
+    branches: [ "main" ]
 
 jobs:
-  sumar:
-    name: Ejecutar Suma (Python puro)
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Clonar repositorio
@@ -19,53 +16,31 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Ejecutar suma
+      - name: Ejecutar Suma (Test)
         run: echo -e "5\n3" | python sumar.py
 
-  restar:
-    name: Ejecutar Resta (Django)
-    runs-on: ubuntu-latest
-    steps:
-      - name: Clonar repositorio
-        uses: actions/checkout@v4
-
-      - name: Configurar Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Instalar dependencias
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Verificar Django
-        run: |
-          python manage.py migrate
-          echo "✅ Django configurado correctamente"
-
-  publicar-github-pages:
-    name: Publicar GitHub Pages
-    needs: [sumar, restar]
+  deploy:
+    needs: test
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Clonar repositorio
         uses: actions/checkout@v4
-
-      # Aquí se asume que tienes una carpeta llamada "public" con tu index.html
-      - name: Desplegar en GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+        
+      - name: Configurar GitHub Pages
+        uses: actions/configure-pages@v5
+        
+      - name: Subir artefacto (HTML)
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
-
-  deploy:
-    name: Desplegar en Producción (Render)
-    needs: [sumar, restar] # Solo se despliega si las pruebas pasan
-    runs-on: ubuntu-latest
-    steps:
-      - name: Disparar Deploy en Render
-        run: |
-          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
+          path: './public' # <-- Aquí toma el index.html de tu carpeta public
+          
+      - name: Desplegar en GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
