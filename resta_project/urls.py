@@ -6,12 +6,12 @@ from resta.views import restar
 urlpatterns = [
     path('admin/', admin.site.urls),
     
-    # 1. Ruta para cuando envían el formulario (ej: /restar/?a=10&b=3)
+    # Ruta para el formulario
     path('restar/', restar, name='restar_form'),
     
-    # 2. Ruta para cuando escriben los números en la URL (ej: /restar/10/3/)
+    # Ruta por si escriben los números directo en la URL
     path('restar/<str:a>/<str:b>/', restar, name='restar_url'),
     
-    # 3. Ruta principal (el index.html)
-    path('', TemplateView.as_view(template_name='index.html'), name='home'),
+    # Ruta principal: carga el HTML de la carpeta public
+    path('', TemplateView.as_view(template_name='public/index.html'), name='home'),
 ]
